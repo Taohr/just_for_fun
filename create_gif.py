@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-# _author_ == 'ljh' 
+
 import imageio 
 import glob 
 import os 
@@ -8,9 +8,11 @@ import shutil
 from PIL import Image, ImageDraw, ImageFont, ImageColor, ImageFilter
 import src.split_gif_to_png
 
-BASE_X = 143
-BASE_Y = 25
-BASE_H = 27
+SIZE_SCALE = 0.8
+
+BASE_X = 143 * SIZE_SCALE
+BASE_Y = 27 * SIZE_SCALE
+BASE_H = 29 * SIZE_SCALE
 OFFSET_H = -6
 
 BOX_OFFSET_X = 0
@@ -18,6 +20,8 @@ BOX_OFFSET_Y = 55
 BOX_SCALE = 1.25
 
 COLOR = (225, 225, 225)
+
+OUT_PUT_FOLDER = 'out'
 
 def cmp(a, b):
     a = os.path.basename(a)
@@ -31,7 +35,7 @@ def find_all_png(path):
     png_filenames = glob.glob('%s/*.png'%path)
     # png_filenames.sort(cmp)
     png_filenames.sort(reverse = True)
-    buf = png_filenames[:] 
+    buf = png_filenames[:]
     return buf
 
 #make images into a gif 
@@ -41,7 +45,8 @@ def create_gif(image_list, gif_name):
         frame = imageio.imread(image_name, 'png')
         frames.append(frame) 
         # Save them as frames into a gif 
-        imageio.mimsave(gif_name, frames, 'GIF', duration = 0.1)
+        out_git_name = os.path.join(OUT_PUT_FOLDER, gif_name)
+        imageio.mimsave(out_git_name, frames, 'GIF', duration = 0.1)
 
 def get_gif_name(path, text):
     gif_name = os.path.basename(path)
@@ -86,7 +91,7 @@ def get_posdata():
     posdata = posfile.readlines()
     posdata = [pos[:-1] for pos in posdata]
     posdata = [pos.split(',') for pos in posdata]
-    posdata = [[int(p) for p in pos] for pos in posdata]
+    posdata = [[int(p)*SIZE_SCALE for p in pos] for pos in posdata]
     return posdata
 
 def copy_a_temp_path(path):
@@ -98,9 +103,9 @@ def copy_a_temp_path(path):
 
 def add_text_to_png(text, png_files, posdata, scale):
     color = COLOR
-    x = posdata[0][1]
-    y = posdata[0][2]
-    h = posdata[0][3]
+    x = posdata[0][0]
+    y = posdata[0][1]
+    h = posdata[0][2]
 
     offx = BASE_X - x
     offy = BASE_Y - y
@@ -111,10 +116,9 @@ def add_text_to_png(text, png_files, posdata, scale):
         if (i >= len(posdata)):
             break
         data = posdata[i]
-        index = data[0]
-        x = data[1]
-        y = data[2]
-        h = data[3]
+        x = data[0]
+        y = data[1]
+        h = data[2]
         new_x = x + offx
         new_y = y + offy + (h * (1-scale))
         new_size = h + offh
@@ -142,5 +146,5 @@ def main(text, scale = 1.0):
     create(gif_path, text, scale, res)
 
 if __name__ == '__main__':
-    # main('hello')
+    main('hello')
     pass
