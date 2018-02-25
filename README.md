@@ -9,7 +9,7 @@
 
 之后输入1~3个字符，生成新的gif图。
 
-![小可爱](https://github.com/Taohr/just_for_fun/blob/master/tuboshu-小可爱.gif?raw=True)
+![小可爱](https://github.com/Taohr/just_for_fun/blob/master/res/tuboshu-小可爱.gif?raw=True)
 
 ## 运行
 
