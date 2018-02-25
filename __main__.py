@@ -3,6 +3,7 @@ import create_gif
 
 
 if __name__ == '__main__':
+    create_gif.main(u'干嘛', 1.0)
     # create_gif.main(u'何晋', 1.0)
     # create_gif.main(u'张磊', 1.0)
     # create_gif.main(u'李娜', 1.0)
